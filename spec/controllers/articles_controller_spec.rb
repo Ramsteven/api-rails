@@ -78,7 +78,7 @@ describe ArticlesController do
           {
             data: {
               attributes: {
-                tittle: '',
+                title: '',
                 content: ''
               }
             }
@@ -89,22 +89,67 @@ describe ArticlesController do
 
         it 'should return 422 status code' do
           subject
-          pp response
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
         it 'should return proper error json' do
           subject
-          expect(json[:errors]).to include([
-           {:id=>"title", :title=>"Title can't be blank"},
-           {:id=>"slug", :title=>"Slug can't be blank"},
-           {:id=>"content", :title=>"Content can't be blank"}
-          ])
+          expect(json[:errors]).to include(
+        {
+          "detail": "can't be blank",
+         "source": {"pointer": "/data/attributes/title"},
+         "status": 422,
+         "title": "Invalid request"
+        },
+        {
+          "detail": "can't be blank",
+         "source": {"pointer": "/data/attributes/slug"},
+         "status": 422,
+         "title": "Invalid request"
+        },
+        {
+          "detail": "can't be blank",
+         "source": {"pointer": "/data/attributes/content"},
+         "status": 422,
+         "title": "Invalid request"
+        }
+          )
         end
       end
 
       context 'when success request sent' do
+         let(:access_token) { create :access_token }
+        before { request.headers['authorization'] = "Bearer #{access_token.token}" }
 
+        let(:valid_attributes) do
+          {
+            'data' => {
+              'attributes' => {
+                "title": 'Awesome article',
+                "content": 'Super content',
+                "slug": 'awesome-article'
+              }
+            }
+          }
+        end
+
+        subject { post :create, params: valid_attributes }
+
+        it 'should have 201 status code' do
+          subject
+          expect(response).to have_http_status(:created)
+        end
+
+        it 'should have proper json body' do
+          subject
+          expect(json_data[:attributes]).to include(
+            valid_attributes['data']['attributes']
+          )
+        end
+
+        it 'should create the article' do
+          expect{ subject }.to change{ Article.count }.by(1)
+        end
       end
    end
   end

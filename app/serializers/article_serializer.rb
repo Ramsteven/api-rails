@@ -1,4 +1,6 @@
 class ArticleSerializer
-    include JSONAPI::Serializer
-    attributes :title, :content, :slug
+  include JSONAPI::Serializer
+    attribute :title 
+    attribute :content
+    attribute :slug
 end

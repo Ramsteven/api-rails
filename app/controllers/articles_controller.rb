@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   include Paginable
-  include ErrorSerializer
+#  include ErrorSerializer
 
   skip_before_action :authorize!, only: [:index, :show]
 
@@ -18,10 +18,11 @@ class ArticlesController < ApplicationController
 
   def create
     article = Article.new(article_params)
-    if article.valid?
+
+    if article.save!
+      render json: serializer.new(article), status: :created
     else
-      raise Errors::Invalid.new({errors: article.errors.to_h})
-      # render json: serializer.new(article)
+      render json: serializer.new(article)
     end
   end
 
@@ -33,6 +34,8 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
+    params.require(:data).require(:attributes).
+      permit(:title, :content, :slug) ||
     ActionController::Parameters.new
   end
   
