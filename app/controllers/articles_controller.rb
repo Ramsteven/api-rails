@@ -17,7 +17,7 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    article = Article.new(article_params)
+    article = current_user.articles.new(article_params)
 
     if article.save!
       render json: serializer.new(article), status: :created
@@ -27,7 +27,7 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    article = Article.find(params[:id])
+    article = current_user.articles.find(params[:id])
     if article.update!(article_params)
       render json: serializer.new(article), status: :ok
     else
