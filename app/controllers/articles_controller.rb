@@ -17,8 +17,7 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    article = current_user.articles.new(article_params)
-
+    article = current_user.articles.build(article_params)
     if article.save!
       render json: serializer.new(article), status: :created
     else
@@ -28,11 +27,10 @@ class ArticlesController < ApplicationController
 
   def update
     article = current_user.articles.find(params[:id])
-    if article.update!(article_params)
-      render json: serializer.new(article), status: :ok
-    else
-      render json: serializer.new(article)
-    end
+    article.update!(article_params)
+    render json: serializer.new(article), status: :ok
+  rescue ActiveRecord::RecordNotFound
+    raise JsonapiErrorsHandler::Errors::Forbidden
   end
 
   def serializer 

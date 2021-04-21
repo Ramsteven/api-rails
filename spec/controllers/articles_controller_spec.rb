@@ -183,7 +183,6 @@ describe ArticlesController do
 
 
     context 'when authorized' do
-      let(:access_token) { create :access_token }
 
       before { request.headers['authorization'] = "Bearer #{access_token.token}" }
 
@@ -199,10 +198,8 @@ describe ArticlesController do
           }
         end
 
-        subject do
-          patch :update, params: invalid_attributes.merge(id: article.id)
-        end
-
+        subject { patch :update, params: invalid_attributes.merge(id: article.id) }
+      
         it 'should return 422 status code' do
           subject
           expect(response).to have_http_status(:unprocessable_entity)
@@ -228,7 +225,6 @@ describe ArticlesController do
       end
 
       context 'when success request sent' do
-        let(:access_token) { create :access_token }
         before { request.headers['authorization'] = "Bearer #{access_token.token}" }
 
         let(:valid_attributes) do
