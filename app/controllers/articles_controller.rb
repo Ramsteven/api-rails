@@ -26,6 +26,14 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def update
+    article = Article.find(params[:id])
+    if article.update!(article_params)
+      render json: serializer.new(article), status: :ok
+    else
+      render json: serializer.new(article)
+    end
+  end
 
   def serializer 
    ArticleSerializer
