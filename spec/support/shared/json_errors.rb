@@ -1,7 +1,7 @@
 shared_examples_for "unauthorized_requests" do  
       let(:authentication_error) do
         {
-          "status": "401",
+          "status": 401,
           "source": { "pointer":"/code" },
           "title":  "Authentication code is invalid",
           "detail": "You must provide valid code in order to exchange it for token."
