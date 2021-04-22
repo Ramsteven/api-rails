@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 user = User.create(
-  { login: 'cvillad', name: 'Carlos Villa', provider: 'github' }
+  { login: 'davi', name: 'david ramirez', provider: 'github' }
 )
 Article.create([
   { title: 'Article title 1',
