@@ -1,6 +1,5 @@
 class ArticlesController < ApplicationController
   include Paginable
-#  include ErrorSerializer
 
   skip_before_action :authorize!, only: [:index, :show]
 
