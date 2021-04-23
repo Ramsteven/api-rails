@@ -1,5 +1,4 @@
 class UserSerializer
   include JSONAPI::Serializer
-  attributes :id
-  attributes :name
+  attributes :login, :name
 end
